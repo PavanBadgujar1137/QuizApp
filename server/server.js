@@ -1,28 +1,22 @@
 const express = require("express");
+const path = require("path");
 const app = express();
-require("dotenv").config();
-app.use(express.json());
-const dbConfig = require("./config/dbConfig");
-
-const usersRoute = require("./routes/usersRoute");
-const examsRoute = require("./routes/examsRoute");
-const resportsRoute = require("./routes/reportsRoute");
-
-app.use("/api/users", usersRoute);
-app.use("/api/exams", examsRoute);
-app.use("/api/reports", resportsRoute);
 const port = process.env.PORT || 5000;
 
-const path = require("path");
-__dirname = path.resolve();
+// Static files
+app.use(express.static(path.join(__dirname, "public")));
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client", "build")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
+// API routes or other middleware
+// Example routes
+app.get("/api/example", (req, res) => {
+  res.json({ message: "API Example" });
+});
+
+// Catch-all route for React router
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
